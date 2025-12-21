@@ -1,0 +1,223 @@
+	DFW EARLY_EMITAVA, "EARLY-EMIT?"
+	PPUSH a5
+	li a0, UART1_BASE
+	lw a1, R32_UART_STATR(a0)
+	andi a5, a1, UART_TC
+	beqz a5, 1f
+	li a5, FORTH_TRUE
+1:
+	ret
+	ENDW EARLY_EMITAVA
+
+	DFW EARLY_EMIT, "EARLY-EMIT"
+	RPUSH ra;
+1:	FC W_PAUSE; FC W_EARLY_EMITAVA; FC W_0BRANCH; .2BYTE 1b - .
+	li a0, UART1_BASE
+	sw a5, R32_UART_DATAR(a0)
+	PPOP a5
+	RPOP ra
+	ret
+	ENDW EARLY_EMIT
+
+	DFW EARLY_KEYAVA, "EARLY-KEY?"
+	PPUSH a5
+	li a0, UART1_BASE
+	lw a1, R32_UART_STATR(a0)
+	andi a5, a1, UART_RXNE
+	beqz a5, 1f
+	li a5, FORTH_TRUE
+1:
+	ret
+	ENDW EARLY_KEYAVA
+
+	DFW EARLY_KEY, "EARLY-KEY"
+	RPUSH ra
+1:	FC W_PAUSE; FC W_EARLY_KEYAVA; FC W_0BRANCH; .2BYTE 1b - .
+	li a0, UART1_BASE
+	PPUSH a5
+	lw a5, R32_UART_DATAR(a0)
+	RPOP ra
+	ret
+	ENDW EARLY_KEY
+
+	DFW EMITAVA, "EMIT?"
+	RPUSH ra
+	FC W_UPLOAD; FC W_USER_EMITAVA; FC W_PLUS; FC W_PERFORM
+	RPOP ra
+	ret
+	ENDW EMITAVA
+
+	DFW EMIT, "EMIT"
+	RPUSH ra
+	FC W_UPLOAD; FC W_USER_EMIT; FC W_PLUS; FC W_PERFORM
+	RPOP ra
+	ret
+	ENDW EMIT
+
+	DFW KEYAVA, "KEY?"
+	RPUSH ra
+	FC W_UPLOAD; FC W_USER_KEYAVA; FC W_PLUS; FC W_PERFORM
+	RPOP ra
+	ret
+	ENDW KEYAVA
+
+	DFW KEY, "KEY"
+	RPUSH ra
+	FC W_UPLOAD; FC W_USER_KEY; FC W_PLUS; FC W_PERFORM
+	RPOP ra
+	ret
+	ENDW KEY
+
+	DFW TYPE, "TYPE"
+	RPUSH ra
+	FC W_DUP; FC W_0BRANCH; .2BYTE 2f - .
+1:
+	FC W_OVER; FC W_CLOAD; FC W_EMIT
+	FC W_1MINUS; FC W_SWAP; FC W_1PLUS; FC W_SWAP
+	FC W_DUP; FC W_EQZ; FC W_0BRANCH; .2BYTE 1b - .
+2:
+	FC W_2DROP
+	RPOP ra
+	ret
+	ENDW TYPE
+
+	DFW NHEXDOT, "NHEX."
+	RPUSH ra
+	FC W_DUP; FC W_0BRANCH; .2BYTE 2f - .
+1:
+	FC W_2DUP; addi a5, a5, -1; slli a5, a5, 2; FC W_RSHIFT;
+	FC W_NUM2HEX; FC W_EMIT; FC W_1MINUS; FC W_DUP;
+	FC W_EQZ; FC W_0BRANCH; .2BYTE 1b - .
+2:
+	FC W_2DROP
+	RPOP ra
+	ret
+	ENDW NHEXDOT
+
+	DFW HEXDOT, "HEX."
+	RPUSH ra
+	FC W_CELL; slli a5, a5, 1; FC W_NHEXDOT
+	RPOP ra
+	ret
+	ENDW HEXDOT
+
+	DFW DOT, "."
+	RPUSH ra
+	FC W_UPLOAD; FC W_USER_DOT; FC W_PLUS; FC W_PERFORM
+	RPOP ra
+	ret
+	ENDW DOT
+
+	DFW QUEST, "?"
+	RPUSH ra
+	FC W_LOAD; FC W_DOT;
+	RPOP ra
+	ret
+	ENDW QUEST
+
+	DFW SPACE, "SPACE"
+	RPUSH ra
+	FC W_UWLIT; .2BYTE ' '; FC W_EMIT;
+	RPOP ra
+	ret
+	ENDW SPACE
+
+	DFW DUMP, "DUMP"
+	RPUSH ra
+	FC W_DUP; FC W_0BRANCH; .2BYTE 2f - .
+1:
+	FC W_OVER; FC W_CLOAD; FC W_0X2; FC W_NHEXDOT; FC W_SPACE;
+	FC W_1MINUS; FC W_SWAP; FC W_1PLUS; FC W_SWAP;
+	FC W_DUP; FC W_EQZ; FC W_0BRANCH; .2BYTE 1b - .
+2:
+	FC W_2DROP
+	RPOP ra
+	ret
+	ENDW DUMP
+
+	DFW CR, "CR"
+	RPUSH ra
+	FC W_UWLIT; .2BYTE '\r'; FC W_EMIT;
+	FC W_UWLIT; .2BYTE '\n'; FC W_EMIT;
+	RPOP ra
+	ret
+	ENDW CR
+
+	DFW DOTS, ".S"
+	RPUSH ra
+	FC W_UWLIT; .2BYTE '<'; FC W_EMIT
+	FC W_DEPTH; FC W_DOT;
+	FC W_UWLIT; .2BYTE '>'; FC W_EMIT
+	FC W_SPACE;
+	FC W_DEPTH; FC W_DUP; FC W_0BRANCH; .2BYTE 2f - .
+1:
+	FC W_DUP; FC W_PICK; FC W_DOT; FC W_SPACE;
+	FC W_1MINUS; FC W_DUP; FC W_EQZ; FC W_0BRANCH; .2BYTE 1b - .
+2:
+	FC W_CR; FC W_DROP;
+	RPOP ra
+	ret
+	ENDW DOTS
+
+	DFW ISNUMBER, "NUMBER?"
+	lw a0, 0(s1)
+	mv a1, a5
+	addi s1, s1, 4
+	li a5, FORTH_FALSE
+	li a2, 2
+	blt a1, a2, 3f
+	lbu a2, 0(a0)
+	li a3, '$'
+	bne a2, a3, 3f
+	addi a0, a0, 1
+	addi a1, a1, -1
+1:
+	lbu a2, 0(a0)
+	li a3, 'F'
+	bgt a2, a3, 3f
+	li a3, '0'
+	blt a2, a3, 3f
+	li a3, '9'
+	ble a2, a3, 2f
+	li a3, 'A'
+	bge a2, a3, 2f
+	j 3f
+2:
+	addi a0, a0, 1
+	addi a1, a1, -1
+	bgtz a1, 1b
+	li a5, FORTH_TRUE
+3:
+	ret
+	ENDW ISNUMBER
+
+	DFW TONUMBER, ">NUMBER"
+	# ( C-ADDR COUNT -- NUMBER )
+	lw a0, 0(s1)
+	mv a1, a5
+	addi s1, s1, 4
+	li a5, 0
+	li a2, 2
+	blt a1, a2, 3f
+	lbu a2, 0(a0)
+	li a3, '$'
+	bne a2, a3, 3f
+	addi a0, a0, 1
+	addi a1, a1, -1
+1:
+	lbu a2, 0(a0)
+	li a3, '9'
+	ble a2, a3, 2f
+	addi a2, a2, -7
+2:
+	addi a2, a2, -48
+	addi a3, a1, -1
+	slli a3, a3, 2
+	sll a3, a2, a3
+	or a5, a5, a3
+	addi a0, a0, 1
+	addi a1, a1, -1
+	bnez a1, 1b
+3:
+	ret
+	ENDW TONUMBER
