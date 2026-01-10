@@ -191,6 +191,12 @@
 	ret
 	ENDW 0X1F
 
+	DFW 0X20, "$20"
+	PPUSH a5
+	li a5, 0x20
+	ret
+	ENDW 0X20
+
 	DFW 0X33, "$33"
 	PPUSH a5
 	li a5, 0x33

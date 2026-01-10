@@ -3,7 +3,7 @@ CC = $(CROSS_COMPILE)gcc
 OD = $(CROSS_COMPILE)objdump
 OC = $(CROSS_COMPILE)objcopy
 SZ = $(CROSS_COMPILE)size
-DB = $(CROSS_COMPILE)gdb
+DB = gdb
 
 CFLAGS += \
 	-Os \
