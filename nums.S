@@ -233,6 +233,12 @@
 	ret
 	ENDW 0XFFF
 
+	DFW 0X7FFF, "$7FFF"
+	PPUSH a5
+	li a5, 0x7FFF
+	ret
+	ENDW 0X7FFF
+
 	DFW 0XFFFF, "$FFFF"
 	PPUSH a5
 	li a5, 0xFFFF
