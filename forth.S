@@ -30,6 +30,9 @@ machine_main:
 	mret
 
 user_main:
+	la a0, RUNTIME_LATEST
+	sw x0, 0(a0)
+
 	la a0, FORTH_LATEST
 	la a1, W_LASTWORD
 	sw a1, 0(a0)
@@ -37,12 +40,15 @@ user_main:
 	la a0, ASSEMBLER_LATEST
 	la a1, W_ALASTWORD
 	sw a1, 0(a0)
-	
+
 	la a0, FORTH_CONTEXT
+
+	la a1, RUNTIME_LATEST
+	sw a1, (0 * 4)(a0)
+
 	la a1, FORTH_LATEST
 	sw a1, (1 * 4)(a0)
 
-	la a0, FORTH_CONTEXT
 	la a1, ASSEMBLER_LATEST
 	sw a1, (2 * 4)(a0)
 
