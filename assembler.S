@@ -764,3 +764,12 @@ ASSEMBLER_LATEST:
 	RPOP ra
 	ret
 	ENDW ASM_RPOP
+
+	ADFW ASM_J, "J,"
+	# ( ADDR -- )
+	RPUSH ra
+	FC W_HERE; FC W_MINUS;
+	FC W_0X0; FC W_ASM_JAL;
+	RPOP ra
+	ret
+	ENDW ASM_J
