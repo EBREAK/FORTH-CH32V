@@ -21,7 +21,6 @@ SECTIONS {
 	{
 		. = ALIGN(4);
 		PROVIDE(_highcode_lma = .); 
-		PROVIDE(__mgp_base = . );
 	} >FLASH AT>FLASH
 
 	.highcode :
