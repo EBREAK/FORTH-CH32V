@@ -6,7 +6,7 @@ _start:
 	.option rvc
 1:
 
-	.section .text
+	.section .text, "ax"
 reset:
 	nop
 

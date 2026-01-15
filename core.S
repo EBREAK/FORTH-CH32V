@@ -1,6 +1,6 @@
 	.set W_LASTWORD, 0
 	.macro DFW LABEL, NAME
-		.section .highcode
+		.section .highcode, "ax"
 		.p2align 1, 0
 	NAME_\LABEL:
 		.ascii "\NAME"
@@ -19,7 +19,7 @@
 	.endm
 
         .macro IDFW LABEL, NAME
-                .section .highcode
+                .section .highcode, "ax"
                 .p2align 1, 0
         NAME_\LABEL:
                 .ascii "\NAME"
@@ -626,11 +626,11 @@ FORTH_LATEST:
 	j W_LLOAD
 	ENDW LOAD
 
-	.section .data
+	.section .data, "a"
 	.p2align 2, 0
 FORTH_DP:
 	.4byte _bss_end
-	.section .text
+	.section .text, "ax"
 
 	DFW DP, "DP"
 	PPUSH a5

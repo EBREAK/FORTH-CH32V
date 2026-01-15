@@ -155,7 +155,7 @@
 	ret
 	ENDW ISIMMEDIATE
 
-	.section .data
+	.section .data, "a"
 	.p2align 2, 0
 FORTH_CONTEXT:
 	.fill CONTEXT_MAX, 4, 0
@@ -225,7 +225,7 @@ FORTH_CONTEXT:
 	ret
 	ENDW COMPON
 
-	.section .data
+	.section .data, "a"
 	.p2align 2, 0
 RUNTIME_LATEST:
 	.4BYTE 0x0

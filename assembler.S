@@ -1,6 +1,6 @@
 	.set W_ALASTWORD, 0
         .macro ADFW LABEL, NAME
-                .section .highcode
+                .section .highcode, "ax"
                 .p2align 1, 0
         NAME_\LABEL:
                 .ascii "\NAME"

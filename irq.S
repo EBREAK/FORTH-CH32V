@@ -6,7 +6,7 @@ vector_table:
 	.fill IRQ_NUM_MAX, 4, 0
 vector_table_end:
 
-	.section .text
+	.section .text, "ax"
 irq_init:
 	/* disable all irq */
 	la a0, PFIC_BASE

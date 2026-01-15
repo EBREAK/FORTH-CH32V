@@ -1,3 +1,5 @@
+	.option arch,rv32imac
+
 	.include "ch32v.S"
 	.include "defs.S"
 	.include "init.S"
@@ -20,7 +22,7 @@ PSP	s1
 UP	tp
 */
 
-	.section .text
+	.section .text, "ax"
 machine_main:
 	FC irq_init
 	FC early_init
@@ -63,7 +65,7 @@ RSTK_ROOT_TOP:
 WIB_ROOT:
 	.fill WORD_NLEN_MAX + 1, 1, 0
 
-	.section .data
+	.section .data, "a"
 	.ascii "USER ROOT"
 	.p2align 2, 0
 USER_ROOT:
@@ -101,7 +103,7 @@ USER_ROOT:
 	.4byte 0
 	.ascii "USER ROOT END"
 
-	.section .text
+	.section .text, "ax"
 	la tp, USER_ROOT
 	lw a5, USER_TOS(tp)
 	lw s0, USER_RSP(tp)
@@ -117,7 +119,7 @@ CODE_ROOT:
 MSG_WELCOME:
 	.ascii "FORTH ON CH32VXXX\r\n"
 	.set LEN_MSG_WELCOME, . - MSG_WELCOME
-	.section .text
+	.section .text, "ax"
 
 	FC W_ULLIT; .4BYTE MSG_WELCOME; FC W_UWLIT; .2BYTE LEN_MSG_WELCOME;
 	FC W_TYPE;

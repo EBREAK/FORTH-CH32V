@@ -25,7 +25,7 @@
 	j 1b
 	ENDW EQCHK
 
-	.section .text
+	.section .text, "ax"
 FORTH_SELFTEST:
 	RPUSH ra
 

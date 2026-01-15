@@ -1,34 +1,16 @@
-CROSS_COMPILE ?= riscv-wch-elf-
-CC = $(CROSS_COMPILE)gcc
-OD = $(CROSS_COMPILE)objdump
-OC = $(CROSS_COMPILE)objcopy
-SZ = $(CROSS_COMPILE)size
-DB = gdb
-
-CFLAGS += \
-	-Os \
-	-march=rv32imac_zicsr \
-	-mabi=ilp32 \
-	-ggdb \
-	-nostdlib \
-	-T link.ld \
-	-static \
-	-mno-relax \
-
-# relax is buggy when I move dict to highcode, why? I dont known, so disable it.
+# SWITCH TO LLVM, BUT LLVM HAVEN'T RELAX SUPPORT. CAUSE HUGE BINARY SIZE
 
 elf: clean
-	$(CC) $(CFLAGS) forth.S -o forth.elf
-	$(OD) -D -s forth.elf > forth.dis
-	$(OC) -O binary forth.elf forth.bin
-	$(OC) -O ihex forth.elf forth.hex
-	$(SZ) forth.elf
+	#clang --target=riscv32-unknown-elf -static forth.S
+	llvm-mc -triple=riscv32 -filetype=obj forth.S -o forth.o
+	ld.lld --relax --relax-gp -T link.ld forth.o -o forth.elf
+	riscv32-linux-gnu-objdump -a -D -s forth.elf > forth.dis
 
 ocd:
 	openocd-wch -f wch-riscv.cfg
 
 db: elf
-	$(DB)
+	gdb
 
 flash:
 	wlink flash forth.elf

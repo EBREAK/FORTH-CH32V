@@ -1,4 +1,4 @@
-	.section .text
+	.section .text, "ax"
 early_init:
 	la a0, RCC_BASE
 
