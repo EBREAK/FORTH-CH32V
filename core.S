@@ -1,6 +1,6 @@
 	.set W_LASTWORD, 0
 	.macro DFW LABEL, NAME
-		.section .text
+		.section .highcode
 		.p2align 1, 0
 	NAME_\LABEL:
 		.ascii "\NAME"
@@ -19,7 +19,7 @@
 	.endm
 
         .macro IDFW LABEL, NAME
-                .section .text
+                .section .highcode
                 .p2align 1, 0
         NAME_\LABEL:
                 .ascii "\NAME"

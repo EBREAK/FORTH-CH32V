@@ -1,6 +1,6 @@
 	.set W_ALASTWORD, 0
         .macro ADFW LABEL, NAME
-                .section .text
+                .section .highcode
                 .p2align 1, 0
         NAME_\LABEL:
                 .ascii "\NAME"
@@ -22,6 +22,7 @@ ASSEMBLER_LATEST:
 	ADFW ASSEMBLER, "ASSEMBLER"
 	PPUSH a5
 	la a5, ASSEMBLER_LATEST
+	ret
 	ENDW ASSEMBLER
 
 	ADFW U_TYPE, "U-TYPE"
@@ -667,7 +668,7 @@ ASSEMBLER_LATEST:
 	ADFW ASM_FAR_CALL, "FAR-CALL,"
 	# ( ADDR -- )
 	RPUSH ra
-	FC W_UWLIT; .2BYTE (1 << 11); FC W_OVER; FC W_AND; FC W_0BRANCH; .2BYTE 1f - .
+	FC W_UWLIT; .2BYTE (1 << 11); FC W_OVER; FC W_AND; FC W_0BRANCH; .2BYTE 1f - . # gas relax on here is buggy
 	FC W_DUP; FC W_UWLIT; .2BYTE (1 << 12); FC W_PLUS; FC W_0X1; FC W_ASM_LUI;
 	FC W_0X1; FC W_0X1; FC W_ASM_JALR;
 	j 2f

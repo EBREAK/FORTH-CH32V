@@ -3,7 +3,7 @@ ENTRY(_start)
 MEMORY {
 	/* min flash: ch32v203 32  KiB */
 	/* max flash: ch32v307 480 KiB */
-	FLASH (rx)  : ORIGIN = 0x00000000, LENGTH = 64K 
+	FLASH (rx)  : ORIGIN = 0x00000000, LENGTH = 128K
 	/* min sram: ch32v203 10  KiB */
 	/* max sram: ch32v307 128 KiB */
 	SRAM (rwx) : ORIGIN = 0x20000000, LENGTH = 20K

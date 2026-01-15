@@ -13,10 +13,13 @@ CFLAGS += \
 	-nostdlib \
 	-T link.ld \
 	-static \
+	-mno-relax \
+
+# relax is buggy when I move dict to highcode, why? I dont known, so disable it.
 
 elf: clean
 	$(CC) $(CFLAGS) forth.S -o forth.elf
-	$(OD) -d -s forth.elf > forth.dis
+	$(OD) -D -s forth.elf > forth.dis
 	$(OC) -O binary forth.elf forth.bin
 	$(OC) -O ihex forth.elf forth.hex
 	$(SZ) forth.elf
