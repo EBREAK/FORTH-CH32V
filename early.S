@@ -116,4 +116,62 @@ usart1_set_baud:
 	li a1, UART_BAUD_115200
 	sw a1, R32_UART_BRR(a0)
 
+chip_id:
+	li a0, 0x1FFFF704
+	lw a1, 0(a0)
+	srli a1, a1, 20
+	li a2, 0xFFF
+	and a1, a1, a2
+
+chip_is_ch32v307:
+	li a2, 0x307
+	bne a1, a2, chip_is_ch32v305
+	# CH32V307:
+	# SRAM MIN SIZE: 32KiB
+	# SRAM MAX SIZE; 128KiB
+	li sp, (0x20000000 | ((32 * 1024) - 4))
+ch32v307_detect_sram_size:
+	li a0, 0x4002201C
+	lw a0, 0(a0)
+	srli a0, a0, 7
+	andi a1, a0, 0b110
+	bnez a1, 1f
+	# SRAM 128KiB
+	li sp, (0x20000000 | ((128 * 1024) - 4))
+	j chip_id_exit
+1:
+	li a2, 0b010
+	bne a1, a2, 1f
+	# SRAM 96KiB
+	li sp, (0x20000000 | ((96 * 1024) - 4))
+	j chip_id_exit
+1:
+	li a2, 0b100
+	bne a1, a2, 1f
+	# SRAM 64KiB
+	li sp, (0x20000000 | ((64 * 1024) - 4))
+	j chip_id_exit
+1:
+	andi a1, a0, 0b111
+	li a2, 0b110
+	bne a1, a2, 1f
+	# SRAM 192KiB
+	li sp, (0x20000000 | ((192 * 1024) - 4))
+	j chip_id_exit
+1:
+	li a2, 0b111
+	bne a1, a2, 1f
+	# SRAM 32KiB
+	li sp, (0x20000000 | ((32 * 1024) - 4))
+	j chip_id_exit
+1:
+
+
+	j chip_id_exit
+chip_is_ch32v305:
+
+chip_is_unknown:
+
+
+chip_id_exit:
 	ret

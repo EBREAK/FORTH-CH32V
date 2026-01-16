@@ -11,6 +11,7 @@
 	.include "io.S"
 	.include "assembler.S"
 	.include "interpret.S"
+	.include "ch32info.S"
 
 	.include "test.S"
 
@@ -117,11 +118,12 @@ CODE_ROOT:
 
 	.section .rodata
 MSG_WELCOME:
-	.ascii "FORTH ON CH32VXXX\r\n"
+	.ascii "FORTH ON CH32V"
 	.set LEN_MSG_WELCOME, . - MSG_WELCOME
 	.section .text, "ax"
 
 	FC W_ULLIT; .4BYTE MSG_WELCOME; FC W_UWLIT; .2BYTE LEN_MSG_WELCOME;
-	FC W_TYPE;
+	FC W_TYPE; FC W_CH32_CHIPID; FC W_0X3; FC W_NHEXDOT; FC W_CR;
+
 	la ra, W_INTERPRET_LOOP
 	jr ra
