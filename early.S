@@ -15,19 +15,56 @@ wait_hsi_rdy:
 	andi a1, a1, RCC_HSIRDY
 	beqz a1, wait_hsi_rdy
 
-sysclk_switch_to_hsi:
+hsi_div1_to_pll:
+	li a1, EXTEN_BASE
+	lw a2, R32_EXTEN_CTR(a1)
+	li a3, ~EXTEN_HSIPRE_MASK
+	and a2, a2, a3
+	li a3, EXTEN_HSIPRE_DIV1
+	or a2, a2, a3
+	sw a2, R32_EXTEN_CTR(a1)
+
+set_pll_src_to_hsi:
 	lw a1, R32_RCC_CFGR0(a0)
-	andi a1, a1, ~(RCC_SW_MASK)
-	ori a1, a1, RCC_SW_HSI
+	li a2, ~RCC_PLLSRC_MASK
+	and a1, a1, a2
+	li a2, RCC_PLLSRC_HSI
+	or a1, a1, a2
 	sw a1, R32_RCC_CFGR0(a0)
 
-wait_sysclk_switch_to_hsi:
+set_pll_mul12:
+	lw a1, R32_RCC_CFGR0(a0)
+	li a2, ~RCC_PLLMUL_MASK
+	and a1, a1, a2
+	li a2, RCC_PLLMUL_M12
+	or a1, a1, a2
+	sw a1, R32_RCC_CFGR0(a0)
+
+pll_on:
+	lw a1, R32_RCC_CTLR(a0)
+	li a2, RCC_PLLON
+	or a1, a1, a2
+	sw a1, R32_RCC_CTLR(a0)
+
+wait_pll_rdy:
+	lw a1, R32_RCC_CTLR(a0)
+	li a2, RCC_PLLRDY
+	and a1, a1, a2
+	beqz a1, wait_pll_rdy
+
+sysclk_switch_to_pll:
+	lw a1, R32_RCC_CFGR0(a0)
+	andi a1, a1, ~(RCC_SW_MASK)
+	ori a1, a1, RCC_SW_PLL
+	sw a1, R32_RCC_CFGR0(a0)
+
+wait_sysclk_switch_to_pll:
 	lw a1, R32_RCC_CFGR0(a0)
 	andi a1, a1, RCC_SWS_MASK
-	li a2, RCC_SWS_HSI
-	bne a1, a2, wait_sysclk_switch_to_hsi
+	li a2, RCC_SWS_PLL
+	bne a1, a2, wait_sysclk_switch_to_pll
 
-	/* SYSCLK: HSI RC 8Mhz */
+	/* SYSCLK: HSI RC 96Mhz */
 
 set_hpre:
 	lw a1, R32_RCC_CFGR0(a0)
@@ -35,7 +72,7 @@ set_hpre:
 	ori a1, a1, RCC_HPRE_DIV1
 	sw a1, R32_RCC_CFGR0(a0)
 
-	/* HCLK: SYSCLK / 1 = 8Mhz */
+	/* HCLK: SYSCLK / 1 = 96Mhz */
 
 set_ppre1:
 	lw a1, R32_RCC_CFGR0(a0)
@@ -43,7 +80,7 @@ set_ppre1:
 	ori a1, a1, RCC_PPRE1_DIV1
 	sw a1, R32_RCC_CFGR0(a0)
 
-	/* PB1CLK: HCLK / 1 = 8Mhz */
+	/* PB1CLK: HCLK / 1 = 96Mhz */
 
 set_ppre2:
 	lw a1, R32_RCC_CFGR0(a0)
@@ -53,7 +90,7 @@ set_ppre2:
 	or a1, a1, a2
 	sw a1, R32_RCC_CFGR0(a0)
 
-	/* PB2CLK: HCLK / 1 = 8Mhz */
+	/* PB2CLK: HCLK / 1 = 96Mhz */
 
 pb1_rst_deassert:
 	
@@ -111,8 +148,8 @@ usart1_enable:
 
 usart1_set_baud:
 	/* UART1 CLK SRC: PB2 */
-	.equ UART_BAUD_9600, ((52 << 4) | (1 << 0))
-	.equ UART_BAUD_115200, ((4 << 4) | (5 << 0))
+	.equ UART_BAUD_9600, ((625 << 4) | (0 << 0))
+	.equ UART_BAUD_115200, ((52 << 4) | (3 << 0))
 	li a1, UART_BAUD_115200
 	sw a1, R32_UART_BRR(a0)
 

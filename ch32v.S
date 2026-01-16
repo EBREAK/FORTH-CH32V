@@ -2,17 +2,28 @@
 .equ R32_RCC_CTLR,  0x00
 .equ RCC_HSION, (1 << 0)
 .equ RCC_HSIRDY, (1 << 1)
+.equ RCC_PLLON, (1 << 24)
+.equ RCC_PLLRDY, (1 << 25)
 .equ R32_RCC_CFGR0, 0x04
 .equ RCC_SW_MASK, (0x3 << 0)
 .equ RCC_SW_HSI, (0x0 << 0)
+.equ RCC_SW_PLL, (0x2 << 0)
 .equ RCC_SWS_MASK, (0x3 << 2)
 .equ RCC_SWS_HSI, (0x0 << 2)
+.equ RCC_SWS_PLL, (0x2 << 2)
 .equ RCC_HPRE_MASK, (0xF << 4)
 .equ RCC_HPRE_DIV1, (0x0 << 4)
 .equ RCC_PPRE1_MASK, (0x7 << 8)
 .equ RCC_PPRE1_DIV1, (0x0 << 8)
 .equ RCC_PPRE2_MASK, (0x7 << 11)
 .equ RCC_PPRE2_DIV1, (0x0 << 11)
+.equ RCC_PLLSRC_MASK, (0x1 << 16)
+.equ RCC_PLLSRC_HSI, (0x0 << 16)
+.equ RCC_PLLSRC_HSE, (0x1 << 16)
+.equ RCC_PLLMUL_MASK, (0xF << 18)
+.equ RCC_PLLMUL_M12, (0b1010 << 18)
+.equ RCC_USBPRE_MASK, (0x3 << 22)
+.equ RCC_USBPRE_DIV2, (0x1 << 22)
 .equ R32_RCC_INTR, 0x08
 .equ R32_RCC_APB2PRSTR, 0x0C
 .equ RCC_IOPA, (1 << 2)
@@ -22,9 +33,16 @@
 .equ R32_RCC_APB2PCENR, 0x18
 .equ R32_RCC_APB1PCENR, 0x1C
 .equ R32_RCC_RSTSCKR, 0x24
+.equ R32_RCC_CFGR2, 0x2C
+.equ RCC_USBFSSRC_MASK, (0x1 << 31)
+.equ RCC_USBFSSRC_PLL, (0x0 << 31)
+.equ RCC_USBFSSRC_PHY, (0x1 << 31)
 
 .equ EXTEN_BASE, 0x40023800
 .equ R32_EXTEN_CTR, 0x00
+.equ EXTEN_HSIPRE_MASK, (1 << 4)
+.equ EXTEN_HSIPRE_DIV1, (1 << 4)
+.equ EXTEN_HSIPRE_DIV2, (0 << 4)
 
 .equ GPIOA_BASE, 0x40010800
 .equ R32_GPIO_CFGLR, 0x00
