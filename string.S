@@ -1,4 +1,4 @@
-	DFW FILL, "FILL"
+	LDFW FILL, "FILL"
 	lw a0, 4(s1)
 	lw a1, 0(s1)
 	mv a2, a5
@@ -14,7 +14,7 @@
 	ret
 	ENDW FILL
 
-	DFW CMOVE, "CMOVE"
+	LDFW CMOVE, "CMOVE"
 	lw a0, 4(s1)
 	lw a1, 0(s1)
 	mv a2, a5
@@ -32,7 +32,7 @@
 	ret
 	ENDW CMOVE
 
-	DFW COMPARE, "COMPARE"
+	LDFW COMPARE, "COMPARE"
 	lw a0, 8(s1)
 	lw a1, 4(s1)
 	lw a2, 0(s1)
@@ -77,7 +77,7 @@
 
 NUM2HEX_LUT:
 	.ascii "0123456789ABCDEF"
-	DFW NUM2HEX, "NUM>HEX"
+	LDFW NUM2HEX, "NUM>HEX"
 	andi a5, a5, 0xf
 	la a0, NUM2HEX_LUT
 	add a5, a0, a5
@@ -85,7 +85,7 @@ NUM2HEX_LUT:
 	ret
 	ENDW NUM2HEX
 
-	DFW HEX2NUM, "HEX>NUM"
+	LDFW HEX2NUM, "HEX>NUM"
 	li a0, '9'
 	ble a5, a0, 1f
 	addi a5, a5, -7

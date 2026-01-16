@@ -14,12 +14,27 @@
 		.set W_LASTWORD, W_\LABEL
 	.endm
 
+	.macro LDFW LABEL, NAME
+		.section .text, "ax"
+		.p2align 1, 0
+	NAME_\LABEL:
+		.ascii "\NAME"
+		.set NLEN_\LABEL, . - NAME_\LABEL
+		.p2align 1, 0
+		.set SHI_BLEN_\LABEL, (BLEN_\LABEL << 8)
+		.2byte NLEN_\LABEL | SHI_BLEN_\LABEL
+		.set PREV_\LABEL, W_LASTWORD
+		.4byte PREV_\LABEL
+	W_\LABEL:
+		.set W_LASTWORD, W_\LABEL
+	.endm
+
 	.macro ENDW LABEL
 		.set BLEN_\LABEL, . - W_\LABEL
 	.endm
 
         .macro IDFW LABEL, NAME
-                .section .highcode, "ax"
+                .section .text, "ax"
                 .p2align 1, 0
         NAME_\LABEL:
                 .ascii "\NAME"
@@ -753,36 +768,6 @@ FORTH_DP:
 	lw s0, USER_RSP(tp)
 	ret
 	ENDW PAUSE
-
-	DFW USER_EMITAVA, "USER-EMIT?"
-	PPUSH a5
-	li a5, USER_EMITAVA
-	ret
-	ENDW USER_EMITAVA
-
-	DFW USER_EMIT, "USER-EMIT"
-	PPUSH a5
-	li a5, USER_EMIT
-	ret
-	ENDW USER_EMIT
-
-	DFW USER_KEYAVA, "USER-KEY?"
-	PPUSH a5
-	li a5, USER_KEYAVA
-	ret
-	ENDW USER_KEYAVA
-
-	DFW USER_KEY, "USER-KEY"
-	PPUSH a5
-	li a5, USER_KEY
-	ret
-	ENDW USER_KEY
-
-	DFW USER_DOT, "USER-."
-	PPUSH a5
-	li a5, USER_DOT
-	ret
-	ENDW USER_DOT
 
 	DFW ON, "ON"
 	RPUSH ra
