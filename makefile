@@ -12,8 +12,13 @@ ocd:
 db: elf
 	gdb
 
-flash:
+flash: swd-flash
+
+swd-flash:
 	wlink flash forth.elf
+
+usb-flash:
+	wchisp flash forth.elf
 
 clean:
 	rm -vf *.elf *.bin *.out *.dis *.map *.hex
