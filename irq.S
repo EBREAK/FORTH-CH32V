@@ -39,14 +39,80 @@ isr_puts:
 	addi sp, sp, 8
 	ret
 
+isr_puthex:
+	addi sp, sp, -16
+	sw ra, 0(sp)
+	sw a1, 4(sp)
+	sw a2, 8(sp)
+	sw a3, 12(sp)
+
+	mv a1, a0
+	li a2, 28
+	la a3, NUM2HEX_LUT
+1:
+	srl a0, a1, a2
+	andi a0, a0, 0xF
+	add a0, a0, a3
+	lbu a0, 0(a0)
+	call isr_putchar
+	addi a2, a2, -4
+	bgez a2, 1b
+
+	lw ra, 0(sp)
+	lw a1, 4(sp)
+	lw a2, 8(sp)
+	lw a3, 12(sp)
+	addi sp, sp, 16
+	ret
+
+isr_dump_regs:
+	addi sp, sp, -8
+	sw ra, 0(sp)
+	sw a0, 4(sp)
+
+	la a0, MSG_MCAUSE_DUMP
+	call isr_puts
+	csrr a0, mcause
+	call isr_puthex
+	la a0, MSG_CR
+	call isr_puts
+
+	la a0, MSG_MEPC_DUMP
+	call isr_puts
+	csrr a0, mepc
+	call isr_puthex
+	la a0, MSG_CR
+	call isr_puts
+
+	la a0, MSG_MTVAL_DUMP
+	call isr_puts
+	csrr a0, mtval
+	call isr_puthex
+	la a0, MSG_CR
+	call isr_puts
+
+	lw ra, 0(sp)
+	lw a0, 4(sp)
+	addi sp, sp, -8
+	ret
+
 unhandled_irq_handler:
 	la a0, MSG_IRQ_UNHANDLED
 	call isr_puts
+	call isr_dump_regs
 1:	j 1b
 
 	.section .rodata
 MSG_IRQ_UNHANDLED:
 	.asciz "\r\nUNHANDLED IRQ\r\n"
+MSG_MCAUSE_DUMP:
+	.asciz "MCAUSE: "
+MSG_MEPC_DUMP:
+	.asciz "MEPC: "
+MSG_MTVAL_DUMP:
+	.asciz "MTVAL: "
+MSG_CR:
+	.asciz "\r\n"
 
 	.section .text
 irq_init:
