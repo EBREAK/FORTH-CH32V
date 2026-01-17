@@ -1,4 +1,4 @@
-	.option arch,rv32imac
+	.option arch,rv32imac_zicsr
 
 	.include "ch32v.S"
 	.include "defs.S"
