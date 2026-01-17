@@ -1,14 +1,14 @@
 # SWITCH TO LLVM, BUT LLVM HAVEN'T RELAX SUPPORT. CAUSE HUGE BINARY SIZE
 
 elf: elf-llvm
-	riscv32-linux-gnu-objdump -a -D -s forth.elf > forth.dis
+	riscv-none-elf-objdump -a -D -s forth.elf > forth.dis
 
 elf-llvm: clean
 	llvm-mc -triple=riscv32 -filetype=obj forth.S -o forth.o
 	ld.lld -T link.ld forth.o -o forth.elf
 
 elf-gas: clean
-	riscv32-linux-gnu-gcc -T link.ld -static -march=rv32imac_zicsr -mabi=ilp32 -nostdlib -nostartfiles -ggdb -mno-relax forth.S -o forth.elf
+	riscv-none-elf-gcc -T link.ld -static -march=rv32imac_zicsr -mabi=ilp32 -nostdlib -nostartfiles -ggdb -mno-relax forth.S -o forth.elf
 
 ocd:
 	openocd-wch -f wch-riscv.cfg
