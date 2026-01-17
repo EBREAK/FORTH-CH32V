@@ -1,4 +1,4 @@
-        DFW CH32_CHIPID, "CH32-CHIPID"
+        LDFW CH32_CHIPID, "CH32-CHIPID"
         PPUSH a5
 	li a0, 0x1FFFF704
 	lw a0, 0(a0)

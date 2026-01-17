@@ -1,5 +1,5 @@
 	.set W_LASTWORD, 0
-	.macro DFW LABEL, NAME
+	.macro HDFW LABEL, NAME
 		.section .highcode, "ax"
 		.p2align 1, 0
 	NAME_\LABEL:
@@ -93,25 +93,25 @@
 FORTH_LATEST:
 	.4BYTE 0x0
 
-	DFW FORTH, "FORTH"
+	HDFW FORTH, "FORTH"
 	PPUSH a5
 	la a5, FORTH_LATEST
 	ret
 	ENDW FORTH
 
-	DFW TRUE, "TRUE"
+	HDFW TRUE, "TRUE"
 	PPUSH a5
 	li a5, FORTH_TRUE
 	ret
 	ENDW TRUE
 
-	DFW FALSE, "FALSE"
+	HDFW FALSE, "FALSE"
 	PPUSH a5
 	li a5, FORTH_FALSE
 	ret
 	ENDW FALSE
 
-	DFW 0BRANCH, "0BRANCH"
+	HDFW 0BRANCH, "0BRANCH"
 	mv a0, a5
 	PPOP a5
 	beqz a0, 1f
@@ -123,21 +123,21 @@ FORTH_LATEST:
 	ret
 	ENDW 0BRANCH
 
-	DFW SWLIT, "SWLIT"
+	HDFW SWLIT, "SWLIT"
 	PPUSH a5
 	lh a5, 0(ra)
 	addi ra, ra, 2
 	ret
 	ENDW SWLIT
 
-	DFW UWLIT, "UWLIT"
+	HDFW UWLIT, "UWLIT"
 	PPUSH a5
 	lhu a5, 0(ra)
 	addi ra, ra, 2
 	ret
 	ENDW UWLIT
 
-	DFW SLLIT, "SLLIT"
+	HDFW SLLIT, "SLLIT"
 	PPUSH a5
 	lhu a5, 0(ra)
 	lhu a0, 2(ra)
@@ -147,17 +147,17 @@ FORTH_LATEST:
 	ret
 	ENDW SLLIT
 
-	DFW ULLIT, "ULLIT"
+	HDFW ULLIT, "ULLIT"
 	j W_SLLIT
 	ENDW ULLIT
 
-	DFW EXECUTE, "EXECUTE"
+	HDFW EXECUTE, "EXECUTE"
 	mv a0, a5
 	PPOP a5
 	jr a0
 	ENDW EXECUTE
 
-	DFW PERFORM, "PERFORM"
+	HDFW PERFORM, "PERFORM"
 	lhu a0, 0(a5)
 	lhu a1, 2(a5)
 	slli a1, a1, 16
@@ -166,36 +166,36 @@ FORTH_LATEST:
 	jr a0
 	ENDW PERFORM
 
-	DFW DROP, "DROP"
+	HDFW DROP, "DROP"
 	PPOP a5
 	ret
 	ENDW DROP
 
-	DFW DUP, "DUP"
+	HDFW DUP, "DUP"
 	PPUSH a5
 	ret
 	ENDW DUP
 
-	DFW SWAP, "SWAP"
+	HDFW SWAP, "SWAP"
 	lw a0, 0(s1)
 	sw a5, 0(s1)
 	mv a5, a0
 	ret
 	ENDW SWAP
 
-	DFW NIP, "NIP"
+	HDFW NIP, "NIP"
 	addi s1, s1, 4
 	ret
 	ENDW NIP
 
-	DFW OVER, "OVER"
+	HDFW OVER, "OVER"
 	addi s1, s1, -4
 	sw a5, 0(s1)
 	lw a5, 4(s1)
 	ret
 	ENDW OVER
 
-	DFW ROT, "ROT"
+	HDFW ROT, "ROT"
 	lw a0, 0(s1)
 	lw a1, 4(s1)
 	sw a5, 0(s1)
@@ -204,7 +204,7 @@ FORTH_LATEST:
 	ret
 	ENDW ROT
 
-	DFW NROT, "-ROT"
+	HDFW NROT, "-ROT"
 	lw a0, 0(s1)
 	lw a1, 4(s1)
 	sw a5, 4(s1)
@@ -213,26 +213,26 @@ FORTH_LATEST:
 	ret
 	ENDW NROT
 	
-	DFW TOR, ">R"
+	HDFW TOR, ">R"
 	RPUSH a5
 	PPOP a5
 	ret
 	ENDW TOR
 
-	DFW FROMR, "R>"
+	HDFW FROMR, "R>"
 	PPUSH a5
 	RPOP a5
 	ret
 	ENDW FROMR
 
-	DFW PICK, "PICK"
+	HDFW PICK, "PICK"
 	slli a5, a5, 2
 	add a5, s1, a5
 	lw a5, 0(a5)
 	ret
 	ENDW PICK
 
-	DFW DEPTH, "DEPTH"
+	HDFW DEPTH, "DEPTH"
 	PPUSH a5
 	lw a0, USER_PS0(tp)
 	sub a5, a0, s1
@@ -241,13 +241,13 @@ FORTH_LATEST:
 	ret
 	ENDW DEPTH
 
-	DFW 2DROP, "2DROP"
+	HDFW 2DROP, "2DROP"
 	lw a5, 4(s1)
 	addi s1, s1, 8
 	ret
 	ENDW 2DROP
 
-	DFW 2DUP, "2DUP"
+	HDFW 2DUP, "2DUP"
 	lw a0, 0(s1)
 	addi s1, s1, -8
 	sw a0, 0(s1)
@@ -255,7 +255,7 @@ FORTH_LATEST:
 	ret
 	ENDW 2DUP
 
-	DFW 2SWAP, "2SWAP"
+	HDFW 2SWAP, "2SWAP"
 	lw a0, 0(s1)
 	lw a1, 4(s1)
 	lw a2, 8(s1)
@@ -266,14 +266,14 @@ FORTH_LATEST:
 	ret
 	ENDW 2SWAP
 
-	DFW 2NIP, "2NIP"
+	HDFW 2NIP, "2NIP"
 	lw a0, 0(s1)
 	addi s1, s1, 8
 	sw a0, 0(s1)
 	ret
 	ENDW 2NIP
 
-	DFW 2OVER, "2OVER"
+	HDFW 2OVER, "2OVER"
 	lw a0, 4(s1)
 	lw a1, 8(s1)
 	addi s1, s1, -8
@@ -283,7 +283,7 @@ FORTH_LATEST:
 	ret
 	ENDW 2OVER
 
-	DFW 2ROT, "2ROT"
+	HDFW 2ROT, "2ROT"
 	RPUSH ra
 	NC W_TOR; NC W_TOR;
 	NC W_2SWAP;
@@ -293,7 +293,7 @@ FORTH_LATEST:
 	ret
 	ENDW 2ROT
 
-	DFW 2NROT, "2-ROT"
+	HDFW 2NROT, "2-ROT"
 	RPUSH ra
 	NC W_2SWAP;
 	NC W_TOR; NC W_TOR;
@@ -303,13 +303,13 @@ FORTH_LATEST:
 	ret
 	ENDW 2NROT
 
-	DFW 3DROP, "3DROP"
+	HDFW 3DROP, "3DROP"
 	lw a5, 8(s1)
 	addi s1, s1, 12
 	ret
 	ENDW 3DROP
 
-	DFW 3DUP, "3DUP"
+	HDFW 3DUP, "3DUP"
 	RPUSH ra
 	NC W_DUP
 	NC W_2OVER
@@ -318,7 +318,7 @@ FORTH_LATEST:
 	ret
 	ENDW 3DUP
 
-	DFW EQ, "="
+	HDFW EQ, "="
 	lw a0, 0(s1)
 	addi s1, s1, 4
 	mv a1, a5
@@ -330,7 +330,7 @@ FORTH_LATEST:
 	ret
 	ENDW EQ
 
-	DFW NE, "<>"
+	HDFW NE, "<>"
 	lw a0, 0(s1)
 	addi s1, s1, 4
 	mv a1, a5
@@ -342,7 +342,7 @@ FORTH_LATEST:
 	ret
 	ENDW NE
 
-	DFW LT, "<"
+	HDFW LT, "<"
 	lw a0, 0(s1)
 	addi s1, s1, 4
 	mv a1, a5
@@ -354,7 +354,7 @@ FORTH_LATEST:
 	ret
 	ENDW LT
 
-	DFW GT, ">"
+	HDFW GT, ">"
 	lw a0, 0(s1)
 	addi s1, s1, 4
 	mv a1, a5
@@ -366,7 +366,7 @@ FORTH_LATEST:
 	ret
 	ENDW GT
 
-	DFW ULT, "U<"
+	HDFW ULT, "U<"
 	lw a0, 0(s1)
 	addi s1, s1, 4
 	mv a1, a5
@@ -378,7 +378,7 @@ FORTH_LATEST:
 	ret
 	ENDW ULT
 
-	DFW UGT, "U>"
+	HDFW UGT, "U>"
 	lw a0, 0(s1)
 	addi s1, s1, 4
 	mv a1, a5
@@ -390,7 +390,7 @@ FORTH_LATEST:
 	ret
 	ENDW UGT
 
-	DFW EQZ, "0="
+	HDFW EQZ, "0="
 	mv a0, a5
 	li a5, FORTH_FALSE
 	beqz a0, 1f
@@ -400,7 +400,7 @@ FORTH_LATEST:
 	ret
 	ENDW EQZ
 
-	DFW NEZ, "0<>"
+	HDFW NEZ, "0<>"
 	mv a0, a5
 	li a5, FORTH_FALSE
 	bnez a0, 1f
@@ -410,7 +410,7 @@ FORTH_LATEST:
 	ret
 	ENDW NEZ
 
-	DFW LTZ, "0<"
+	HDFW LTZ, "0<"
 	mv a0, a5
 	li a5, FORTH_FALSE
 	bltz a0, 1f
@@ -420,7 +420,7 @@ FORTH_LATEST:
 	ret
 	ENDW LTZ
 
-	DFW GTZ, "0>"
+	HDFW GTZ, "0>"
 	mv a0, a5
 	li a5, FORTH_FALSE
 	bgtz a0, 1f
@@ -430,7 +430,7 @@ FORTH_LATEST:
 	ret
 	ENDW GTZ
 
-	DFW MIN, "MIN"
+	HDFW MIN, "MIN"
 	lw a0, 0(s1)
 	addi s1, s1, 4
 	blt a0, a5, 1f
@@ -440,7 +440,7 @@ FORTH_LATEST:
 	ret
 	ENDW MIN
 
-	DFW MAX, "MAX"
+	HDFW MAX, "MAX"
 	lw a0, 0(s1)
 	addi s1, s1, 4
 	bgt a0, a5, 1f
@@ -450,7 +450,7 @@ FORTH_LATEST:
 	ret
 	ENDW MAX
 
-	DFW UMIN, "UMIN"
+	HDFW UMIN, "UMIN"
 	lw a0, 0(s1)
 	addi s1, s1, 4
 	bltu a0, a5, 1f
@@ -460,7 +460,7 @@ FORTH_LATEST:
 	ret
 	ENDW UMIN
 
-	DFW UMAX, "UMAX"
+	HDFW UMAX, "UMAX"
 	lw a0, 0(s1)
 	addi s1, s1, 4
 	bgtu a0, a5, 1f
@@ -470,128 +470,128 @@ FORTH_LATEST:
 	ret
 	ENDW UMAX
 
-	DFW PLUS, "+"
+	HDFW PLUS, "+"
 	PPOP a0
 	add a5, a0, a5
 	ret
 	ENDW PLUS
 
-	DFW MINUS, "-"
+	HDFW MINUS, "-"
 	PPOP a0
 	sub a5, a0, a5
 	ret
 	ENDW MINUS
 
-	DFW MULTI, "*"
+	HDFW MULTI, "*"
 	PPOP a0
 	mul a5, a0, a5
 	ret
 	ENDW MULTI
 
-	DFW DIVID, "/"
+	HDFW DIVID, "/"
 	PPOP a0
 	div a5, a0, a5
 	ret
 	ENDW DIVID
 
-	DFW MOD, "MOD"
+	HDFW MOD, "MOD"
 	PPOP a0
 	rem a5, a0, a5
 	ret
 	ENDW MOD
 
-	DFW AND, "AND"
+	HDFW AND, "AND"
 	PPOP a0
 	and a5, a0, a5
 	ret
 	ENDW AND
 
-	DFW OR, "OR"
+	HDFW OR, "OR"
 	PPOP a0
 	or a5, a0, a5
 	ret
 	ENDW OR
 
-	DFW XOR, "XOR"
+	HDFW XOR, "XOR"
 	PPOP a0
 	xor a5, a0, a5
 	ret
 	ENDW XOR
 
-	DFW LSHIFT, "LSHIFT"
+	HDFW LSHIFT, "LSHIFT"
 	PPOP a0
 	sll a5, a0, a5
 	ret
 	ENDW LSHIFT
 
-	DFW RSHIFT, "RSHIFT"
+	HDFW RSHIFT, "RSHIFT"
 	PPOP a0
 	srl a5, a0, a5
 	ret
 	ENDW RSHIFT
 
-	DFW INVERT, "INVERT"
+	HDFW INVERT, "INVERT"
 	xori a5, a5, -1
 	ret
 	ENDW INVERT
 
-	DFW NEGATE, "NEGATE"
+	HDFW NEGATE, "NEGATE"
 	xori a5, a5, -1
 	addi a5, a5, 1
 	ret
 	ENDW NEGATE
 
-	DFW 1PLUS, "1+"
+	HDFW 1PLUS, "1+"
 	addi a5, a5, 1
 	ret
 	ENDW 1PLUS
 
-	DFW 2PLUS, "2+"
+	HDFW 2PLUS, "2+"
 	addi a5, a5, 2
 	ret
 	ENDW 2PLUS
 
-	DFW 4PLUS, "4+"
+	HDFW 4PLUS, "4+"
 	addi a5, a5, 4
 	ret
 	ENDW 4PLUS
 
-	DFW 1MINUS, "1-"
+	HDFW 1MINUS, "1-"
 	addi a5, a5, -1
 	ret
 	ENDW 1MINUS
 
-	DFW 2MINUS, "2-"
+	HDFW 2MINUS, "2-"
 	addi a5, a5, -2
 	ret
 	ENDW 2MINUS
 
-	DFW 4MINUS, "4-"
+	HDFW 4MINUS, "4-"
 	addi a5, a5, -4
 	ret
 	ENDW 4MINUS
 
-	DFW 2MULTI, "2*"
+	HDFW 2MULTI, "2*"
 	slli a5, a5, 1
 	ret
 	ENDW 2MULTI
 
-	DFW 4MULTI, "4*"
+	HDFW 4MULTI, "4*"
 	slli a5, a5, 2
 	ret
 	ENDW 4MULTI
 
-	DFW 2DIVID, "2/"
+	HDFW 2DIVID, "2/"
 	srli a5, a5, 1
 	ret
 	ENDW 2DIVID
 
-	DFW 4DIVID, "4/"
+	HDFW 4DIVID, "4/"
 	srli a5, a5, 2
 	ret
 	ENDW 4DIVID
 
-	DFW ABS, "ABS"
+	HDFW ABS, "ABS"
 	bltz a5, 1f
 	ret
 1:
@@ -600,12 +600,12 @@ FORTH_LATEST:
 	ret
 	ENDW ABS
 
-	DFW CLOAD, "C@"
+	HDFW CLOAD, "C@"
 	lbu a5, 0(a5)
 	ret
 	ENDW CLOAD
 
-	DFW WLOAD, "W@"
+	HDFW WLOAD, "W@"
 	andi a0, a5, 0x1
 	bnez a0, 1f
 	lhu a5, 0(a5)
@@ -618,7 +618,7 @@ FORTH_LATEST:
 	ret
 	ENDW WLOAD
 
-	DFW LLOAD, "L@"
+	HDFW LLOAD, "L@"
 	andi a0, a5, 0x3
 	bnez a0, 1f
 	lw a5, 0(a5)
@@ -645,7 +645,7 @@ FORTH_LATEST:
 	ret
 	ENDW LLOAD
 
-	DFW LOAD, "@"
+	HDFW LOAD, "@"
 	j W_LLOAD
 	ENDW LOAD
 
@@ -655,27 +655,27 @@ FORTH_DP:
 	.4byte _bss_end
 	.section .text, "ax"
 
-	DFW DP, "DP"
+	HDFW DP, "DP"
 	PPUSH a5
 	la a5, FORTH_DP
 	ret
 	ENDW DP
 
-	DFW HERE, "HERE"
+	HDFW HERE, "HERE"
 	RPUSH ra
 	NC W_DP; NC W_LOAD;
 	RPOP ra
 	ret
 	ENDW HERE
 
-	DFW PAD, "PAD"
+	HDFW PAD, "PAD"
 	RPUSH ra
 	NC W_HERE; NC W_UWLIT; .2BYTE 256; NC W_PLUS;
 	RPOP ra
 	ret
 	ENDW PAD
 
-	DFW CSTORE, "C!"
+	HDFW CSTORE, "C!"
 	lw a0, 0(s1)
 	sb a0, 0(a5)
 	lw a5, 4(s1)
@@ -683,7 +683,7 @@ FORTH_DP:
 	ret
 	ENDW CSTORE
 
-	DFW WSTORE, "W!"
+	HDFW WSTORE, "W!"
 	lw a0, 0(s1)
 	mv a1, a5
 	lw a5, 4(s1)
@@ -699,7 +699,7 @@ FORTH_DP:
 	ret
 	ENDW WSTORE
 
-	DFW LSTORE, "L!"
+	HDFW LSTORE, "L!"
 	lw a0, 0(s1)
 	mv a1, a5
 	lw a5, 4(s1)
@@ -726,37 +726,37 @@ FORTH_DP:
 	ret
 	ENDW LSTORE
 
-	DFW STORE, "!"
+	HDFW STORE, "!"
 	j W_LSTORE
 	ENDW STORE
 
-	DFW WALIGNED, "WALIGNED"
+	HDFW WALIGNED, "WALIGNED"
 	addi a5, a5, 1
 	andi a5, a5, -2
 	ret
 	ENDW WALIGNED
 
-	DFW LALIGNED, "LALIGNED"
+	HDFW LALIGNED, "LALIGNED"
 	addi a5, a5, 3
 	andi a5, a5, -4
 	ret
 	ENDW LALIGNED
 
-	DFW CELL, "CELL"
+	HDFW CELL, "CELL"
 	j W_0X4
 	ENDW CELL
 
-	DFW CELLS, "CELLS"
+	HDFW CELLS, "CELLS"
 	j W_4MULTI
 	ENDW CELLS
 
-	DFW UPLOAD, "UP@"
+	HDFW UPLOAD, "UP@"
 	PPUSH a5
 	mv a5, tp
 	ret
 	ENDW UPLOAD
 
-	DFW PAUSE, "PAUSE"
+	HDFW PAUSE, "PAUSE"
 	sw a5, USER_TOS(tp)
 	sw ra, USER_RAP(tp)
 	sw s1, USER_PSP(tp)
@@ -769,60 +769,60 @@ FORTH_DP:
 	ret
 	ENDW PAUSE
 
-	DFW ON, "ON"
+	HDFW ON, "ON"
 	RPUSH ra
 	NC W_TRUE; NC W_SWAP; NC W_STORE;
 	RPOP ra
 	ret
 	ENDW ON
 
-	DFW OFF, "OFF"
+	HDFW OFF, "OFF"
 	RPUSH ra
 	NC W_FALSE; NC W_SWAP; NC W_STORE;
 	RPOP ra
 	ret
 	ENDW OFF
 
-	DFW ALLOT, "ALLOT"
+	HDFW ALLOT, "ALLOT"
 	RPUSH ra
 	NC W_HERE; NC W_PLUS; NC W_DP; NC W_STORE;
 	RPOP ra
 	ret
 	ENDW ALLOT
 
-	DFW CCOMMA, "C,"
+	HDFW CCOMMA, "C,"
 	RPUSH ra
 	NC W_HERE; NC W_CSTORE; NC W_0X1; NC W_ALLOT;
 	RPOP ra
 	ret
 	ENDW CCOMMA
 
-	DFW WCOMMA, "W,"
+	HDFW WCOMMA, "W,"
 	RPUSH ra
 	NC W_HERE; NC W_WSTORE; NC W_0X2; NC W_ALLOT;
 	RPOP ra
 	ret
 	ENDW WCOMMA
 
-	DFW LCOMMA, "L,"
+	HDFW LCOMMA, "L,"
 	RPUSH ra
 	NC W_HERE; NC W_LSTORE; NC W_0X4; NC W_ALLOT;
 	RPOP ra
 	ret
 	ENDW LCOMMA
 
-	DFW COMMA, ","
+	HDFW COMMA, ","
 	j W_LCOMMA
 	ENDW COMMA
 
-	DFW WALIGN, "WALIGN"
+	HDFW WALIGN, "WALIGN"
 	RPUSH ra
 	NC W_HERE; NC W_WALIGNED; NC W_DP; NC W_STORE;
 	RPOP ra
 	ret
 	ENDW WALIGN
 
-	DFW LALIGN, "LALIGN"
+	HDFW LALIGN, "LALIGN"
 	RPUSH ra
 	NC W_HERE; NC W_LALIGNED; NC W_DP; NC W_STORE;
 	RPOP ra

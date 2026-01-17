@@ -1,4 +1,4 @@
-	DFW PZCHK, "PZCHK"
+	LDFW PZCHK, "PZCHK"
 	li a0, TOS_INIT
 	bne a0, a5, 1f
 	lw a0, USER_PS0(tp)
@@ -11,7 +11,7 @@
 	j 1b
 	ENDW PZCHK
 
-	DFW EQCHK, "EQCHK"
+	LDFW EQCHK, "EQCHK"
 	mv a0, a5
 	lw a1, 0(s1)
 	lw a5, 4(s1)
