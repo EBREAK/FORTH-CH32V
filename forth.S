@@ -11,6 +11,8 @@
 	.include "io.S"
 	.include "assembler.S"
 	.include "interpret.S"
+	.include "timer.S"
+
 	.include "ch32info.S"
 
 	.include "test.S"

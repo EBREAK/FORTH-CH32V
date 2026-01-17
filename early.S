@@ -153,6 +153,21 @@ usart1_set_baud:
 	li a1, UART_BAUD_115200
 	sw a1, R32_UART_BRR(a0)
 
+systick_init:
+	/* SYSTICK CLK SRC: SYSCLK */
+	li a0, SYSTICK_BASE
+	lw a1, R32_STK_SR(a0)
+	li a2, ~(1 << 0);
+	and a1, a1, a2
+	sw a1, R32_STK_SR(a0)
+	li a1, ((96 * 1000) - 1) # 1ms
+	sw a1, R32_STK_CMPLR(a0)
+	sw x0, R32_STK_CMPHR(a0)
+	sw x0, R32_STK_CNTL(a0)
+	sw x0, R32_STK_CNTH(a0)
+	li a1, (STK_STE | STK_STIE | STK_STCLK_DIV1 | STK_STRE)
+	sw a1, R32_STK_CTLR(a0)
+
 chip_id:
 	li a0, 0x1FFFF704
 	lw a1, 0(a0)

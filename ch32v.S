@@ -89,3 +89,24 @@
 .equ R32_PFIC_IRER2, 0x184
 .equ R32_PFIC_IRER3, 0x188
 .equ R32_PFIC_IRER4, 0x18C
+
+.equ SYSTICK_BASE, 0xE000F000
+.equ R32_STK_CTLR, 0x00
+.equ STK_STE, (1 << 0)
+.equ STK_STIE, (1 << 1)
+.equ STK_STCLK_DIV1, (1 << 2)
+.equ STK_STCLK_DIV8, (0 << 2)
+.equ STK_STCLK_MASK, (1 << 2)
+.equ STK_STRE, (1 << 3)
+.equ R32_STK_SR,   0x04
+.equ R32_STK_CNTL, 0x08
+.equ R32_STK_CNTH, 0x0C
+.equ R32_STK_CMPLR, 0x10
+.equ R32_STK_CMPHR, 0x14
+
+.equ IRQN_NMI, 0x2
+.equ IRQN_HARDFAULT, 0x3
+.equ IRQN_ECALL_M, 0x5
+.equ IRQN_BREAK_POINT, 0x9
+.equ IRQN_SYSTICK, 0xC
+.equ IRQN_SW, 0xE

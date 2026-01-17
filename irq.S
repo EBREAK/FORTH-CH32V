@@ -129,8 +129,8 @@ irq_init:
 	csrw 0x804, a0
 
 	/* Enable global interrupt, configure privileged mode */
-	li a0, 0x88           
-	csrw mstatus, 0
+	li a0, (0 << 11) | (1 << 3) | (1 << 7)
+	csrw mstatus, a0
 
 	/* interrupt vector table address & mode */
 	la a0, vector_table
@@ -148,4 +148,31 @@ irq_init:
 	bltu a0, a1, 1b
 2:
 
+systick_irq_init:
+	la a0, vector_table
+	la a1, systick_irq_handler
+	sw a1, (IRQN_SYSTICK * 4)(a0)
+
+	la a0, millis_ticks
+	sw x0, 0(a0)
+
+	la a0, PFIC_BASE
+	li a1, (1 << IRQN_SYSTICK)
+	sw a1, R32_PFIC_IENR1(a0)
+
 	ret
+
+	.section .bss
+	.p2align 2, 0
+millis_ticks:
+	.4byte 0x0
+
+	.section .text
+systick_irq_handler:
+	la a0, SYSTICK_BASE
+	sw zero, R32_STK_SR(a0)
+	la a0, millis_ticks
+	li a1, 1
+	amoadd.w a0, a1, 0(a0)
+	# call isr_puthex
+	mret
