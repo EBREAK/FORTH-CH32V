@@ -1,5 +1,14 @@
 	.equ IRQ_NUM_MAX, 255
 
+/*
+WCH's Internal Hardware Stack Will auto save all "caller saved register"
+X1
+X5-7
+X10-11
+X12-17
+X28-31
+*/
+
 	.section .vector_table
 	/* must align with 1KiB, so we put it on sram start */
 vector_table:
