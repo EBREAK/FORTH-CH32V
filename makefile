@@ -25,4 +25,4 @@ usb-flash:
 	wchisp flash forth.elf
 
 clean:
-	rm -vf *.elf *.bin *.out *.dis *.map *.hex
+	rm -vf *.elf *.bin *.out *.dis *.map *.hex *.o
