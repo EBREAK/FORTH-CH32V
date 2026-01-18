@@ -11,6 +11,7 @@
 	.include "io.S"
 	.include "assembler.S"
 	.include "interpret.S"
+	.include "multitask.S"
 	.include "timer.S"
 	.include "fifo.S"
 
@@ -74,7 +75,7 @@ WIB_ROOT:
 	.ascii "USER ROOT"
 	.p2align 2, 0
 USER_ROOT:
-	# 0
+	# 0 USER_UID (NOT USED, RESV)
 	.4byte 0
 	# 1
 	.4byte USER_ROOT
