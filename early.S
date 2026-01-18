@@ -148,7 +148,14 @@ usart1_enable:
 
 usart1_set_baud:
 	/* UART1 CLK SRC: PB2 */
+	# if your serial port haven't hardware flow control support
+	# you can switch to low baudrate or add delay after word send
+	.equ UART_BAUD_2400, ((2500 << 4) | (0 << 0))
+	.equ UART_BAUD_4800, ((1250 << 4) | (0 << 0))
 	.equ UART_BAUD_9600, ((625 << 4) | (0 << 0))
+	.equ UART_BAUD_19200, ((312 << 4) | (8 << 0))
+	.equ UART_BAUD_38400, ((156 << 4) | (3 << 0))
+	.equ UART_BAUD_57600, ((104 << 4) | (2 << 0))
 	.equ UART_BAUD_115200, ((52 << 4) | (3 << 0))
 	li a1, UART_BAUD_115200
 	sw a1, R32_UART_BRR(a0)
