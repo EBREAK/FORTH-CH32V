@@ -103,9 +103,25 @@ USER_ROOT:
 	# 13
 	.4byte WIB_ROOT
 	# 14
-	.4byte 0
+	.4byte 0 # WIN
 	# 15
-	.4byte 0
+	.4byte 0 # INTERPRET STATE
+	# 16
+	.4byte 0 # RESV
+	# 17
+	.4byte 0 # RESV
+	# 18
+	.4byte 0 # RESV
+	# 19
+	.4byte 0 # RESV
+	# 20
+	.4byte 0 # RESV
+	# 21
+	.4byte 0 # RESV
+	# 22
+	.4byte 0 # RESV
+	# 23
+	.4byte 0 # RESV
 	.ascii "USER ROOT END"
 
 	.section .text, "ax"

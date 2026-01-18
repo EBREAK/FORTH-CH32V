@@ -19,7 +19,7 @@
 
 .set TOS_INIT, 0xDEADBEEF
 
-.set USER_SIZE, (16 * 4)
+.set USER_SIZE, (24 * 4)
 .set CONTEXT_MAX, 8
 
 .set FORTH_TRUE, 0xFFFFFFFF
