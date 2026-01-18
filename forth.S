@@ -12,6 +12,7 @@
 	.include "assembler.S"
 	.include "interpret.S"
 	.include "timer.S"
+	.include "fifo.S"
 
 	.include "ch32info.S"
 

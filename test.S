@@ -34,6 +34,7 @@ FORTH_SELFTEST:
 	.include "io_test.S"
 	.include "assembler_test.S"
 	.include "interpret_test.S"
+	.include "fifo_test.S"
 
 	RPOP ra
 	ret
