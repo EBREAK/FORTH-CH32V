@@ -51,18 +51,17 @@
 
 	LDFW FIFO8_PUSH, "FIFO8-PUSH"
 	# ( C FIFO8-CTX -- )
-	lw a0, FIFO8_HEAD(a5)
-	lw a1, FIFO8_NUM(a5)
-	add a0, a1, a0
+	lw a0, FIFO8_BUFF(a5)
 	lw a1, FIFO8_SIZE(a5)
-	rem a0, a0, a1
-	lw a1, FIFO8_BUFF(a5)
-	add a0, a0, a1
-	lbu a1, 0(s1)
-	sb a1, 0(a0)
-	add a5, a5, FIFO8_NUM
-	li a0, 1
-	amoadd.w a0, a0, (a5)
+	lw a2, FIFO8_HEAD(a5)
+	lw a3, FIFO8_NUM(a5)
+	add a2, a2, a3
+	rem a2, a2, a1
+	add a2, a2, a0
+	lw a0, 0(s1)
+	sb a0, 0(a2)
+	addi a3, a3, 1
+	sw a3, FIFO8_NUM(a5)
 	lw a5, 4(s1)
 	addi s1, s1, 8
 	ret
@@ -71,19 +70,17 @@
 	LDFW FIFO8_POP, "FIFO8-POP"
 	# ( FIFO8-CTX -- C )
 	mv a4, a5
-	lw a0, FIFO8_HEAD(a4)
-	lw a2, FIFO8_SIZE(a4)
-	rem a0, a0, a2
-	lw a1, FIFO8_BUFF(a4)
-	add a0, a0, a1
+	lw a0, FIFO8_BUFF(a4)
+	lw a1, FIFO8_SIZE(a4)
+	lw a2, FIFO8_HEAD(a4)
+	lw a3, FIFO8_NUM(a4)
+	add a0, a0, a2
 	lbu a5, 0(a0)
-	lw a0, FIFO8_HEAD(a4)
-	add a0, a0, 1
-	rem a0, a0, a2
-	sw a0, FIFO8_HEAD(a4)
-	add a0, a4, FIFO8_NUM
-	li a1, -1
-	amoadd.w a1, a1, (a0)
+	add a2, a2, 1
+	rem a2, a2, a1
+	sw a2, FIFO8_HEAD(a4)
+	add a3, a3, -1
+	sw a3, FIFO8_NUM(a4)
 	ret
 	ENDW FIFO8_POP
 
