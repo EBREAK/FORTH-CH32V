@@ -351,6 +351,21 @@ RUNTIME_LATEST:
 	ret
 	IENDW THEN
 
+	LDFW QUOTE, "\""
+	# ( ADDR -- ADDR COUNT )
+	RPUSH ra
+	FC W_0X0;
+1:
+	FC W_KEY; FC W_DUP; FC W_UWLIT; .2BYTE '"'; FC W_NE;
+	FC W_0BRANCH; .2BYTE 2f - .
+	FC W_TOR; FC W_2DUP; FC W_PLUS; FC W_FROMR; FC W_SWAP; FC W_CSTORE;
+	FC W_1PLUS; j 1b
+2:
+	FC W_DROP;
+	RPOP ra
+	ret
+	ENDW QUOTE
+
 	.section .rodata
 MSG_NOT_FOUND:
 	.ascii "NOT FOUND\r\n"
