@@ -4,3 +4,14 @@
 	lw a5, 0(a0)
 	ret
 	ENDW MILLIS
+
+	LDFW MSLEEP, "MSLEEP"
+	# ( COUNT -- )
+	RPUSH ra
+	FC W_MILLIS; FC W_PLUS;
+1:
+	FC W_PAUSE; FC W_MILLIS; FC W_OVER; FC W_GT; FC W_0BRANCH; .2BYTE 1b - .
+	FC W_DROP;
+	RPOP ra
+	ret
+	ENDW MSLEEP
