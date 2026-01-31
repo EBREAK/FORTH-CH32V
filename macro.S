@@ -113,3 +113,12 @@
         W_\LABEL:
                 .set W_ALASTWORD, W_\LABEL
         .endm
+
+	.macro LDEFCONST LABEL, VALUE
+		.equ \LABEL, \VALUE
+		LDFW \LABEL, "\LABEL"
+		PPUSH a5
+		li a5, \LABEL
+		ret
+		ENDW \LABEL
+	.endm
