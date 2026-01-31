@@ -1,5 +1,6 @@
 	.option arch,rv32imac_zicsr
 
+	.include "macro.S"
 	.include "ch32v.S"
 	.include "defs.S"
 	.include "init.S"
