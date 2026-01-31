@@ -367,6 +367,27 @@ RUNTIME_LATEST:
 	ret
 	ENDW QUOTE
 
+	LDFW PAREN, "("
+	# ( -- )
+	RPUSH ra
+1:
+	FC W_KEY; FC W_UWLIT; .2BYTE ')'; FC W_EQ; FC W_0BRANCH; .2BYTE 1b - .
+	RPOP ra
+	ret
+	ENDW PAREN
+
+	LDFW BACKSLASH, "\\"
+	# ( -- )
+	RPUSH ra
+1:
+	FC W_KEY;
+	FC W_UWLIT; .2BYTE '\n'; FC W_OVER; FC W_EQ;
+	FC W_UWLIT; .2BYTE '\r'; FC W_ROT; FC W_EQ; FC W_OR;
+	FC W_0BRANCH; .2BYTE 1b - .
+	RPOP ra
+	ret
+	ENDW BACKSLASH
+
 	.section .rodata
 MSG_NOT_FOUND:
 	.ascii "NOT FOUND\r\n"
