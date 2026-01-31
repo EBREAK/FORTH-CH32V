@@ -26,3 +26,6 @@ usb-flash:
 
 clean:
 	rm -vf *.elf *.bin *.out *.dis *.map *.hex *.o
+
+linux-sender:
+	cc -Wall -Wextra -O2 sender.c -o sender

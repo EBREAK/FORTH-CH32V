@@ -12,3 +12,10 @@ DEFAULT UART PIN:
         PA12 USART1 RTS
 #+END_SRC
 
+** SENDER
+
+IF YOUR LINK NOT SUPPORT FLOW CONTROL, WE CAN USE SENDER:
+
+#+BEGIN_SRC
+ make linux-sender && picocom --send-cmd=./sender --echo -b 115200 /dev/ttyUSB0
+#+END_SRC
