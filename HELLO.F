@@ -1,0 +1,2 @@
+PAD " HELLO WORLD" TYPE CR
+
