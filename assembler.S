@@ -6,7 +6,7 @@
                 .ascii "\NAME"
                 .set NLEN_\LABEL, . - NAME_\LABEL
                 .p2align 1, 0
-                .set SHI_BLEN_\LABEL, (BLEN_\LABEL << 8)
+                .set SHI_BLEN_\LABEL, ((BLEN_\LABEL / 2) << 8)
                 .2byte NLEN_\LABEL | SHI_BLEN_\LABEL
                 .set PREV_\LABEL, W_ALASTWORD
                 .4byte PREV_\LABEL

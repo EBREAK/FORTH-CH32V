@@ -251,6 +251,7 @@ RUNTIME_LATEST:
 	LDFW BLENLOAD, "BLEN@"
 	# ( XT -- BLEN )
 	lbu a5, -5(a5)
+	slli a5, a5, 1
 	ret
 	ENDW BLENLOAD
 
@@ -401,10 +402,10 @@ MSG_NOT_FOUND:
 
 	LDFW INTERPRET, "INTERPRET"
 	RPUSH ra
+	FC W_SWLIT; .2BYTE 0x06; FC W_EMIT;
 	FC W_WORD_GET; FC W_WIB; FC W_WIB_NUM_USED;
 	FC W_FIND_WORD; FC W_DUP; FC W_0BRANCH; .2BYTE INTERPRET_TRY_NUMBER - .
 	FC W_DUP; FC W_ISIMMEDIATE; FC W_0BRANCH; .2BYTE 1f - .
-	# sucks goto, because this word body is > 256BYTE, we need make it smaller
 	j 2f
 1:
 	FC W_STATE; FC W_LOAD; FC W_0BRANCH; .2BYTE 2f -.
