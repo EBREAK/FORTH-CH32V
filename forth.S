@@ -16,9 +16,6 @@
 	.include "timer.S"
 	.include "fifo.S"
 
-	.include "qingke.S"
-	.include "ch32info.S"
-
 	.include "test.S"
 
 /*
